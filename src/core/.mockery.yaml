@@ -1,0 +1,30 @@
+all: true
+pkgname: "mocks"
+dir: '{{.InterfaceDir}}/mocks'
+filename: mocks.go
+force-file-write: true
+formatter: goimports
+include-auto-generated: false
+log-level: info
+structname: '{{.Mock}}{{.InterfaceName}}'
+recursive: false
+require-template-schema-exists: true
+template: testify
+template-schema: '{{.Template}}.schema.json'
+packages:
+  github.com/mujak27/gamen/src/core/internal/interfaces/repository:
+    config:
+      all: true
+  github.com/mujak27/gamen/src/core/internal/interfaces/services:
+    config:
+      all: true
+
+  # configuration types
+  github.com/mujak27/gamen/src/core/internal/extensions/configuration_types/kubernetes/interfaces:
+    config:
+      all: true
+
+  # plugins
+  github.com/mujak27/gamen/src/core/internal/extensions/plugins/restart_deployment/interfaces:
+    config:
+      all: true
