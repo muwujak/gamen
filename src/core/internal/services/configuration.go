@@ -1,15 +1,16 @@
 package services
 
 import (
+	"github.com/google/uuid"
 	interfaces "github.com/mujak27/gamen/src/core/internal/interfaces/repository"
 	"github.com/mujak27/gamen/src/core/internal/models"
 )
 
 type ConfigurationService struct {
-	repo interfaces.ConfigurationRepository
+	repo interfaces.IConfigurationRepository
 }
 
-func NewConfigurationService(repo interfaces.ConfigurationRepository) *ConfigurationService {
+func NewConfigurationService(repo interfaces.IConfigurationRepository) *ConfigurationService {
 	return &ConfigurationService{repo: repo}
 }
 
@@ -29,9 +30,28 @@ func (s *ConfigurationService) ListConfigurationTypes() ([]models.ConfigurationT
 	return s.repo.ListConfigurationTypes()
 }
 
-// TODO: create repository function for create configuration to database
 func (s *ConfigurationService) CreateConfiguration(configuration models.Configuration) (models.Configuration, error) {
-	return s.repo.CreateConfiguration(configuration)
+	// validate configuration based on its type
+	configurationType, err := s.repo.GetConfigurationTypeServiceById(configuration.ConfigurationTypeID)
+	if err != nil {
+		return models.Configuration{}, err
+	}
+	err = configurationType.ValidateConfiguration(configuration)
+	if err != nil {
+		return models.Configuration{}, err
+	}
+
+	// generate new id for configuration
+	configuration.ID = uuid.New()
+
+	// create configuration and write to database
+	createdConfiguration, err := s.repo.CreateConfiguration(configuration)
+	if err != nil {
+		return models.Configuration{}, err
+	}
+
+	// TODO: return configuration
+	return createdConfiguration, nil
 }
 
 func (s *ConfigurationService) DeleteConfiguration(name string) error {

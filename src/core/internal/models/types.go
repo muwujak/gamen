@@ -6,8 +6,6 @@ import (
 	"fmt"
 )
 
-// JSON type for handling JSON columns
-// TODO: should we create DTO type for each model to hide JSON type from another layer?
 type JSON map[string]interface{}
 
 func (j JSON) Value() (driver.Value, error) {

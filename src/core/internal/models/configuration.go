@@ -10,7 +10,7 @@ type ConfigurationType struct {
 	ID          uuid.UUID `json:"id" db:"id" gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
 	Name        string    `json:"name" db:"name" gorm:"uniqueIndex;not null"`
 	Description string    `json:"description" db:"description"`
-	Schema      JSON      `json:"schema" db:"schema" gorm:"type:jsonb"`
+	Schema      JSON      `json:"schema" db:"schema" gorm:"type:jsonb"`	// used by frontend to render input fields
 	CreatedAt   time.Time `json:"created_at" db:"created_at" gorm:"autoCreateTime"`
 	UpdatedAt   time.Time `json:"updated_at" db:"updated_at" gorm:"autoUpdateTime"`
 

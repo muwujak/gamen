@@ -21,7 +21,8 @@ func TestWidgetServiceTypeAssertion(t *testing.T) {
 
 func TestWidgetServiceActionSuccess(t *testing.T) {
 	mockCatalogueService := mocks.NewMockCatalogueService(t)
-	mockConfigurationService := mocks.NewMockConfigurationService(t)
+
+	mockConfigurationService := mocks.NewMockIConfigurationService(t)
 	mockWidgetRepository := repositoryMocks.NewMockWidgetRepository(t)
 	mockPluginService := mocks.NewMockPluginService(t)
 
@@ -56,9 +57,9 @@ func TestWidgetServiceActionSuccess(t *testing.T) {
 		UpdatedAt:       time.Now(),
 	}, nil)
 
-	mockCatalogueService.On("GetPluginFunctionById", pluginUUID.String()).Return(mockPluginService, nil)
+	mockCatalogueService.EXPECT().GetPluginFunctionById(pluginUUID).Return(mockPluginService, nil)
 
-	mockPluginService.On("Action", dto.PluginActionSchema{
+	mockPluginService.EXPECT().Action(dto.PluginActionSchema{
 		Configuration: configuration,
 		RawPluginData: payload.Data,
 	}).Return(nil)
