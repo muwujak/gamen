@@ -8,11 +8,11 @@ import (
 
 type WidgetService struct {
 	catalogueService     serviceInterfaces.CatalogueService
-	configurationService serviceInterfaces.ConfigurationService
+	configurationService serviceInterfaces.IConfigurationService
 	widgetRepository     repositoryInterfaces.WidgetRepository
 }
 
-func NewWidgetService(catalogueService serviceInterfaces.CatalogueService, configurationService serviceInterfaces.ConfigurationService, widgetRepository repositoryInterfaces.WidgetRepository) *WidgetService {
+func NewWidgetService(catalogueService serviceInterfaces.CatalogueService, configurationService serviceInterfaces.IConfigurationService, widgetRepository repositoryInterfaces.WidgetRepository) *WidgetService {
 	return &WidgetService{catalogueService: catalogueService, configurationService: configurationService, widgetRepository: widgetRepository}
 }
 

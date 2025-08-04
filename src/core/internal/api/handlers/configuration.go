@@ -7,10 +7,10 @@ import (
 )
 
 type ConfigurationHandler struct {
-	service interfaces.ConfigurationService
+	service interfaces.IConfigurationService
 }
 
-func NewConfigurationHandler(service interfaces.ConfigurationService) *ConfigurationHandler {
+func NewConfigurationHandler(service interfaces.IConfigurationService) *ConfigurationHandler {
 	return &ConfigurationHandler{service: service}
 }
 
@@ -37,8 +37,6 @@ func (configurationHandler *ConfigurationHandler) GetConfigurationTypeById(ctx *
 }
 
 // TODO: still not properly thought, configurations logic are hard coded, but we have a function that list configurations from repository
-// TODO: solution: init all configuration types in main.go, store in array, and make handler return it
-// configuration models are only for backend logic, but frontend only needs to know the array list
 func (configurationHandler *ConfigurationHandler) ListConfigurations(ctx *gin.Context) {
 	configurationType, err := configurationHandler.service.ListConfigurations()
 	if err != nil {
