@@ -7,7 +7,7 @@ import (
 )
 
 type Dashboard struct {
-	ID             uuid.UUID  `json:"id" db:"id" gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
+	ID             uuid.UUID  `json:"id" db:"id" gorm:"type:uuid;primary_key;not null"`
 	Name           string     `json:"name" db:"name" gorm:"not null"`
 	Description    string     `json:"description" db:"description"`
 	TeamID         uuid.UUID  `json:"team_id" db:"team_id" gorm:"type:uuid;not null"`
@@ -25,7 +25,7 @@ type Dashboard struct {
 }
 
 type Widget struct {
-	ID              uuid.UUID  `json:"id" db:"id" gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
+	ID              uuid.UUID  `json:"id" db:"id" gorm:"type:uuid;primary_key;not null"`
 	DashboardID     uuid.UUID  `json:"dashboard_id" db:"dashboard_id" gorm:"type:uuid;not null"`
 	PluginID        uuid.UUID  `json:"plugin_id" db:"plugin_id" gorm:"type:uuid;not null"`
 	ConfigurationID uuid.UUID  `json:"configuration_id" db:"configuration_id" gorm:"type:uuid;not null"`
@@ -39,7 +39,6 @@ type Widget struct {
 
 	// Relationships
 	Dashboard     Dashboard     `json:"dashboard,omitempty" gorm:"foreignKey:DashboardID"`
-	Plugin        Plugin        `json:"plugin,omitempty" gorm:"foreignKey:PluginID"`
 	Configuration Configuration `json:"configuration,omitempty" gorm:"foreignKey:ConfigurationID"`
 	Creator       User          `json:"creator,omitempty" gorm:"foreignKey:CreatedBy"`
 }

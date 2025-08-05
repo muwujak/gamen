@@ -38,7 +38,7 @@ func (r TeamMemberRole) Value() (driver.Value, error) {
 }
 
 type User struct {
-	ID           uuid.UUID  `json:"id" db:"id" gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
+	ID           uuid.UUID  `json:"id" db:"id" gorm:"type:uuid;primary_key;not null"`
 	Email        string     `json:"email" db:"email" gorm:"uniqueIndex;not null"`
 	Username     string     `json:"username" db:"username" gorm:"uniqueIndex;not null"`
 	FirstName    string     `json:"first_name" db:"first_name"`
@@ -58,7 +58,7 @@ type User struct {
 }
 
 type Team struct {
-	ID          uuid.UUID `json:"id" db:"id" gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
+	ID          uuid.UUID `json:"id" db:"id" gorm:"type:uuid;primary_key;not null"`
 	Name        string    `json:"name" db:"name" gorm:"uniqueIndex;not null"`
 	Description string    `json:"description" db:"description"`
 	IsActive    bool      `json:"is_active" db:"is_active" gorm:"default:true"`
@@ -74,7 +74,7 @@ type Team struct {
 }
 
 type TeamMember struct {
-	ID        uuid.UUID      `json:"id" db:"id" gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
+	ID        uuid.UUID      `json:"id" db:"id" gorm:"type:uuid;primary_key;not null"`
 	TeamID    uuid.UUID      `json:"team_id" db:"team_id" gorm:"type:uuid;not null"`
 	UserID    uuid.UUID      `json:"user_id" db:"user_id" gorm:"type:uuid;not null"`
 	Role      TeamMemberRole `json:"role" db:"role" gorm:"type:varchar(20);not null"`
