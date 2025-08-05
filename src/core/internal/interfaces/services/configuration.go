@@ -16,5 +16,6 @@ type IConfigurationService interface {
 
 type IConfigurationTypeService interface {
 	GetId() uuid.UUID
+	Get() models.ConfigurationType
 	ValidateConfiguration(configuration models.Configuration) error
 }
