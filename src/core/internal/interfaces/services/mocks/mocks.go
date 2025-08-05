@@ -244,8 +244,8 @@ func (_m *MockIConfigurationService) EXPECT() *MockIConfigurationService_Expecte
 }
 
 // CreateConfiguration provides a mock function for the type MockIConfigurationService
-func (_mock *MockIConfigurationService) CreateConfiguration(configuration models.Configuration) (models.Configuration, error) {
-	ret := _mock.Called(configuration)
+func (_mock *MockIConfigurationService) CreateConfiguration(payload dto.ConfigurationCreatePayload) (models.Configuration, error) {
+	ret := _mock.Called(payload)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateConfiguration")
@@ -253,16 +253,16 @@ func (_mock *MockIConfigurationService) CreateConfiguration(configuration models
 
 	var r0 models.Configuration
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(models.Configuration) (models.Configuration, error)); ok {
-		return returnFunc(configuration)
+	if returnFunc, ok := ret.Get(0).(func(dto.ConfigurationCreatePayload) (models.Configuration, error)); ok {
+		return returnFunc(payload)
 	}
-	if returnFunc, ok := ret.Get(0).(func(models.Configuration) models.Configuration); ok {
-		r0 = returnFunc(configuration)
+	if returnFunc, ok := ret.Get(0).(func(dto.ConfigurationCreatePayload) models.Configuration); ok {
+		r0 = returnFunc(payload)
 	} else {
 		r0 = ret.Get(0).(models.Configuration)
 	}
-	if returnFunc, ok := ret.Get(1).(func(models.Configuration) error); ok {
-		r1 = returnFunc(configuration)
+	if returnFunc, ok := ret.Get(1).(func(dto.ConfigurationCreatePayload) error); ok {
+		r1 = returnFunc(payload)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -275,16 +275,16 @@ type MockIConfigurationService_CreateConfiguration_Call struct {
 }
 
 // CreateConfiguration is a helper method to define mock.On call
-//   - configuration models.Configuration
-func (_e *MockIConfigurationService_Expecter) CreateConfiguration(configuration interface{}) *MockIConfigurationService_CreateConfiguration_Call {
-	return &MockIConfigurationService_CreateConfiguration_Call{Call: _e.mock.On("CreateConfiguration", configuration)}
+//   - payload dto.ConfigurationCreatePayload
+func (_e *MockIConfigurationService_Expecter) CreateConfiguration(payload interface{}) *MockIConfigurationService_CreateConfiguration_Call {
+	return &MockIConfigurationService_CreateConfiguration_Call{Call: _e.mock.On("CreateConfiguration", payload)}
 }
 
-func (_c *MockIConfigurationService_CreateConfiguration_Call) Run(run func(configuration models.Configuration)) *MockIConfigurationService_CreateConfiguration_Call {
+func (_c *MockIConfigurationService_CreateConfiguration_Call) Run(run func(payload dto.ConfigurationCreatePayload)) *MockIConfigurationService_CreateConfiguration_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 models.Configuration
+		var arg0 dto.ConfigurationCreatePayload
 		if args[0] != nil {
-			arg0 = args[0].(models.Configuration)
+			arg0 = args[0].(dto.ConfigurationCreatePayload)
 		}
 		run(
 			arg0,
@@ -293,27 +293,27 @@ func (_c *MockIConfigurationService_CreateConfiguration_Call) Run(run func(confi
 	return _c
 }
 
-func (_c *MockIConfigurationService_CreateConfiguration_Call) Return(configuration1 models.Configuration, err error) *MockIConfigurationService_CreateConfiguration_Call {
-	_c.Call.Return(configuration1, err)
+func (_c *MockIConfigurationService_CreateConfiguration_Call) Return(configuration models.Configuration, err error) *MockIConfigurationService_CreateConfiguration_Call {
+	_c.Call.Return(configuration, err)
 	return _c
 }
 
-func (_c *MockIConfigurationService_CreateConfiguration_Call) RunAndReturn(run func(configuration models.Configuration) (models.Configuration, error)) *MockIConfigurationService_CreateConfiguration_Call {
+func (_c *MockIConfigurationService_CreateConfiguration_Call) RunAndReturn(run func(payload dto.ConfigurationCreatePayload) (models.Configuration, error)) *MockIConfigurationService_CreateConfiguration_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // DeleteConfiguration provides a mock function for the type MockIConfigurationService
-func (_mock *MockIConfigurationService) DeleteConfiguration(name string) error {
-	ret := _mock.Called(name)
+func (_mock *MockIConfigurationService) DeleteConfiguration(id uuid.UUID) error {
+	ret := _mock.Called(id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for DeleteConfiguration")
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(string) error); ok {
-		r0 = returnFunc(name)
+	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) error); ok {
+		r0 = returnFunc(id)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -326,16 +326,16 @@ type MockIConfigurationService_DeleteConfiguration_Call struct {
 }
 
 // DeleteConfiguration is a helper method to define mock.On call
-//   - name string
-func (_e *MockIConfigurationService_Expecter) DeleteConfiguration(name interface{}) *MockIConfigurationService_DeleteConfiguration_Call {
-	return &MockIConfigurationService_DeleteConfiguration_Call{Call: _e.mock.On("DeleteConfiguration", name)}
+//   - id uuid.UUID
+func (_e *MockIConfigurationService_Expecter) DeleteConfiguration(id interface{}) *MockIConfigurationService_DeleteConfiguration_Call {
+	return &MockIConfigurationService_DeleteConfiguration_Call{Call: _e.mock.On("DeleteConfiguration", id)}
 }
 
-func (_c *MockIConfigurationService_DeleteConfiguration_Call) Run(run func(name string)) *MockIConfigurationService_DeleteConfiguration_Call {
+func (_c *MockIConfigurationService_DeleteConfiguration_Call) Run(run func(id uuid.UUID)) *MockIConfigurationService_DeleteConfiguration_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 string
+		var arg0 uuid.UUID
 		if args[0] != nil {
-			arg0 = args[0].(string)
+			arg0 = args[0].(uuid.UUID)
 		}
 		run(
 			arg0,
@@ -349,13 +349,13 @@ func (_c *MockIConfigurationService_DeleteConfiguration_Call) Return(err error) 
 	return _c
 }
 
-func (_c *MockIConfigurationService_DeleteConfiguration_Call) RunAndReturn(run func(name string) error) *MockIConfigurationService_DeleteConfiguration_Call {
+func (_c *MockIConfigurationService_DeleteConfiguration_Call) RunAndReturn(run func(id uuid.UUID) error) *MockIConfigurationService_DeleteConfiguration_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // GetConfigurationById provides a mock function for the type MockIConfigurationService
-func (_mock *MockIConfigurationService) GetConfigurationById(id string) (models.Configuration, error) {
+func (_mock *MockIConfigurationService) GetConfigurationById(id uuid.UUID) (models.Configuration, error) {
 	ret := _mock.Called(id)
 
 	if len(ret) == 0 {
@@ -364,15 +364,15 @@ func (_mock *MockIConfigurationService) GetConfigurationById(id string) (models.
 
 	var r0 models.Configuration
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(string) (models.Configuration, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) (models.Configuration, error)); ok {
 		return returnFunc(id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(string) models.Configuration); ok {
+	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) models.Configuration); ok {
 		r0 = returnFunc(id)
 	} else {
 		r0 = ret.Get(0).(models.Configuration)
 	}
-	if returnFunc, ok := ret.Get(1).(func(string) error); ok {
+	if returnFunc, ok := ret.Get(1).(func(uuid.UUID) error); ok {
 		r1 = returnFunc(id)
 	} else {
 		r1 = ret.Error(1)
@@ -386,16 +386,16 @@ type MockIConfigurationService_GetConfigurationById_Call struct {
 }
 
 // GetConfigurationById is a helper method to define mock.On call
-//   - id string
+//   - id uuid.UUID
 func (_e *MockIConfigurationService_Expecter) GetConfigurationById(id interface{}) *MockIConfigurationService_GetConfigurationById_Call {
 	return &MockIConfigurationService_GetConfigurationById_Call{Call: _e.mock.On("GetConfigurationById", id)}
 }
 
-func (_c *MockIConfigurationService_GetConfigurationById_Call) Run(run func(id string)) *MockIConfigurationService_GetConfigurationById_Call {
+func (_c *MockIConfigurationService_GetConfigurationById_Call) Run(run func(id uuid.UUID)) *MockIConfigurationService_GetConfigurationById_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 string
+		var arg0 uuid.UUID
 		if args[0] != nil {
-			arg0 = args[0].(string)
+			arg0 = args[0].(uuid.UUID)
 		}
 		run(
 			arg0,
@@ -409,13 +409,13 @@ func (_c *MockIConfigurationService_GetConfigurationById_Call) Return(configurat
 	return _c
 }
 
-func (_c *MockIConfigurationService_GetConfigurationById_Call) RunAndReturn(run func(id string) (models.Configuration, error)) *MockIConfigurationService_GetConfigurationById_Call {
+func (_c *MockIConfigurationService_GetConfigurationById_Call) RunAndReturn(run func(id uuid.UUID) (models.Configuration, error)) *MockIConfigurationService_GetConfigurationById_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // GetConfigurationTypeById provides a mock function for the type MockIConfigurationService
-func (_mock *MockIConfigurationService) GetConfigurationTypeById(id string) (models.ConfigurationType, error) {
+func (_mock *MockIConfigurationService) GetConfigurationTypeById(id uuid.UUID) (models.ConfigurationType, error) {
 	ret := _mock.Called(id)
 
 	if len(ret) == 0 {
@@ -424,15 +424,15 @@ func (_mock *MockIConfigurationService) GetConfigurationTypeById(id string) (mod
 
 	var r0 models.ConfigurationType
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(string) (models.ConfigurationType, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) (models.ConfigurationType, error)); ok {
 		return returnFunc(id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(string) models.ConfigurationType); ok {
+	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) models.ConfigurationType); ok {
 		r0 = returnFunc(id)
 	} else {
 		r0 = ret.Get(0).(models.ConfigurationType)
 	}
-	if returnFunc, ok := ret.Get(1).(func(string) error); ok {
+	if returnFunc, ok := ret.Get(1).(func(uuid.UUID) error); ok {
 		r1 = returnFunc(id)
 	} else {
 		r1 = ret.Error(1)
@@ -446,16 +446,16 @@ type MockIConfigurationService_GetConfigurationTypeById_Call struct {
 }
 
 // GetConfigurationTypeById is a helper method to define mock.On call
-//   - id string
+//   - id uuid.UUID
 func (_e *MockIConfigurationService_Expecter) GetConfigurationTypeById(id interface{}) *MockIConfigurationService_GetConfigurationTypeById_Call {
 	return &MockIConfigurationService_GetConfigurationTypeById_Call{Call: _e.mock.On("GetConfigurationTypeById", id)}
 }
 
-func (_c *MockIConfigurationService_GetConfigurationTypeById_Call) Run(run func(id string)) *MockIConfigurationService_GetConfigurationTypeById_Call {
+func (_c *MockIConfigurationService_GetConfigurationTypeById_Call) Run(run func(id uuid.UUID)) *MockIConfigurationService_GetConfigurationTypeById_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 string
+		var arg0 uuid.UUID
 		if args[0] != nil {
-			arg0 = args[0].(string)
+			arg0 = args[0].(uuid.UUID)
 		}
 		run(
 			arg0,
@@ -469,7 +469,7 @@ func (_c *MockIConfigurationService_GetConfigurationTypeById_Call) Return(config
 	return _c
 }
 
-func (_c *MockIConfigurationService_GetConfigurationTypeById_Call) RunAndReturn(run func(id string) (models.ConfigurationType, error)) *MockIConfigurationService_GetConfigurationTypeById_Call {
+func (_c *MockIConfigurationService_GetConfigurationTypeById_Call) RunAndReturn(run func(id uuid.UUID) (models.ConfigurationType, error)) *MockIConfigurationService_GetConfigurationTypeById_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -584,6 +584,66 @@ func (_c *MockIConfigurationService_ListConfigurations_Call) RunAndReturn(run fu
 	return _c
 }
 
+// UpdateConfiguration provides a mock function for the type MockIConfigurationService
+func (_mock *MockIConfigurationService) UpdateConfiguration(payload dto.ConfigurationUpdatePayload) (models.Configuration, error) {
+	ret := _mock.Called(payload)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateConfiguration")
+	}
+
+	var r0 models.Configuration
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(dto.ConfigurationUpdatePayload) (models.Configuration, error)); ok {
+		return returnFunc(payload)
+	}
+	if returnFunc, ok := ret.Get(0).(func(dto.ConfigurationUpdatePayload) models.Configuration); ok {
+		r0 = returnFunc(payload)
+	} else {
+		r0 = ret.Get(0).(models.Configuration)
+	}
+	if returnFunc, ok := ret.Get(1).(func(dto.ConfigurationUpdatePayload) error); ok {
+		r1 = returnFunc(payload)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockIConfigurationService_UpdateConfiguration_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateConfiguration'
+type MockIConfigurationService_UpdateConfiguration_Call struct {
+	*mock.Call
+}
+
+// UpdateConfiguration is a helper method to define mock.On call
+//   - payload dto.ConfigurationUpdatePayload
+func (_e *MockIConfigurationService_Expecter) UpdateConfiguration(payload interface{}) *MockIConfigurationService_UpdateConfiguration_Call {
+	return &MockIConfigurationService_UpdateConfiguration_Call{Call: _e.mock.On("UpdateConfiguration", payload)}
+}
+
+func (_c *MockIConfigurationService_UpdateConfiguration_Call) Run(run func(payload dto.ConfigurationUpdatePayload)) *MockIConfigurationService_UpdateConfiguration_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 dto.ConfigurationUpdatePayload
+		if args[0] != nil {
+			arg0 = args[0].(dto.ConfigurationUpdatePayload)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MockIConfigurationService_UpdateConfiguration_Call) Return(configuration models.Configuration, err error) *MockIConfigurationService_UpdateConfiguration_Call {
+	_c.Call.Return(configuration, err)
+	return _c
+}
+
+func (_c *MockIConfigurationService_UpdateConfiguration_Call) RunAndReturn(run func(payload dto.ConfigurationUpdatePayload) (models.Configuration, error)) *MockIConfigurationService_UpdateConfiguration_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // NewMockIConfigurationTypeService creates a new instance of MockIConfigurationTypeService. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
 // The first argument is typically a *testing.T value.
 func NewMockIConfigurationTypeService(t interface {
@@ -609,6 +669,50 @@ type MockIConfigurationTypeService_Expecter struct {
 
 func (_m *MockIConfigurationTypeService) EXPECT() *MockIConfigurationTypeService_Expecter {
 	return &MockIConfigurationTypeService_Expecter{mock: &_m.Mock}
+}
+
+// Get provides a mock function for the type MockIConfigurationTypeService
+func (_mock *MockIConfigurationTypeService) Get() models.ConfigurationType {
+	ret := _mock.Called()
+
+	if len(ret) == 0 {
+		panic("no return value specified for Get")
+	}
+
+	var r0 models.ConfigurationType
+	if returnFunc, ok := ret.Get(0).(func() models.ConfigurationType); ok {
+		r0 = returnFunc()
+	} else {
+		r0 = ret.Get(0).(models.ConfigurationType)
+	}
+	return r0
+}
+
+// MockIConfigurationTypeService_Get_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Get'
+type MockIConfigurationTypeService_Get_Call struct {
+	*mock.Call
+}
+
+// Get is a helper method to define mock.On call
+func (_e *MockIConfigurationTypeService_Expecter) Get() *MockIConfigurationTypeService_Get_Call {
+	return &MockIConfigurationTypeService_Get_Call{Call: _e.mock.On("Get")}
+}
+
+func (_c *MockIConfigurationTypeService_Get_Call) Run(run func()) *MockIConfigurationTypeService_Get_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run()
+	})
+	return _c
+}
+
+func (_c *MockIConfigurationTypeService_Get_Call) Return(configurationType models.ConfigurationType) *MockIConfigurationTypeService_Get_Call {
+	_c.Call.Return(configurationType)
+	return _c
+}
+
+func (_c *MockIConfigurationTypeService_Get_Call) RunAndReturn(run func() models.ConfigurationType) *MockIConfigurationTypeService_Get_Call {
+	_c.Call.Return(run)
+	return _c
 }
 
 // GetId provides a mock function for the type MockIConfigurationTypeService
