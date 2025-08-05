@@ -280,16 +280,16 @@ func (_c *MockIConfigurationRepository_CreateConfiguration_Call) RunAndReturn(ru
 }
 
 // DeleteConfiguration provides a mock function for the type MockIConfigurationRepository
-func (_mock *MockIConfigurationRepository) DeleteConfiguration(name string) error {
-	ret := _mock.Called(name)
+func (_mock *MockIConfigurationRepository) DeleteConfiguration(id uuid.UUID) error {
+	ret := _mock.Called(id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for DeleteConfiguration")
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(string) error); ok {
-		r0 = returnFunc(name)
+	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) error); ok {
+		r0 = returnFunc(id)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -302,16 +302,16 @@ type MockIConfigurationRepository_DeleteConfiguration_Call struct {
 }
 
 // DeleteConfiguration is a helper method to define mock.On call
-//   - name string
-func (_e *MockIConfigurationRepository_Expecter) DeleteConfiguration(name interface{}) *MockIConfigurationRepository_DeleteConfiguration_Call {
-	return &MockIConfigurationRepository_DeleteConfiguration_Call{Call: _e.mock.On("DeleteConfiguration", name)}
+//   - id uuid.UUID
+func (_e *MockIConfigurationRepository_Expecter) DeleteConfiguration(id interface{}) *MockIConfigurationRepository_DeleteConfiguration_Call {
+	return &MockIConfigurationRepository_DeleteConfiguration_Call{Call: _e.mock.On("DeleteConfiguration", id)}
 }
 
-func (_c *MockIConfigurationRepository_DeleteConfiguration_Call) Run(run func(name string)) *MockIConfigurationRepository_DeleteConfiguration_Call {
+func (_c *MockIConfigurationRepository_DeleteConfiguration_Call) Run(run func(id uuid.UUID)) *MockIConfigurationRepository_DeleteConfiguration_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 string
+		var arg0 uuid.UUID
 		if args[0] != nil {
-			arg0 = args[0].(string)
+			arg0 = args[0].(uuid.UUID)
 		}
 		run(
 			arg0,
@@ -325,13 +325,13 @@ func (_c *MockIConfigurationRepository_DeleteConfiguration_Call) Return(err erro
 	return _c
 }
 
-func (_c *MockIConfigurationRepository_DeleteConfiguration_Call) RunAndReturn(run func(name string) error) *MockIConfigurationRepository_DeleteConfiguration_Call {
+func (_c *MockIConfigurationRepository_DeleteConfiguration_Call) RunAndReturn(run func(id uuid.UUID) error) *MockIConfigurationRepository_DeleteConfiguration_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // GetConfigurationById provides a mock function for the type MockIConfigurationRepository
-func (_mock *MockIConfigurationRepository) GetConfigurationById(id string) (models.Configuration, error) {
+func (_mock *MockIConfigurationRepository) GetConfigurationById(id uuid.UUID) (models.Configuration, error) {
 	ret := _mock.Called(id)
 
 	if len(ret) == 0 {
@@ -340,15 +340,15 @@ func (_mock *MockIConfigurationRepository) GetConfigurationById(id string) (mode
 
 	var r0 models.Configuration
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(string) (models.Configuration, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) (models.Configuration, error)); ok {
 		return returnFunc(id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(string) models.Configuration); ok {
+	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) models.Configuration); ok {
 		r0 = returnFunc(id)
 	} else {
 		r0 = ret.Get(0).(models.Configuration)
 	}
-	if returnFunc, ok := ret.Get(1).(func(string) error); ok {
+	if returnFunc, ok := ret.Get(1).(func(uuid.UUID) error); ok {
 		r1 = returnFunc(id)
 	} else {
 		r1 = ret.Error(1)
@@ -362,16 +362,16 @@ type MockIConfigurationRepository_GetConfigurationById_Call struct {
 }
 
 // GetConfigurationById is a helper method to define mock.On call
-//   - id string
+//   - id uuid.UUID
 func (_e *MockIConfigurationRepository_Expecter) GetConfigurationById(id interface{}) *MockIConfigurationRepository_GetConfigurationById_Call {
 	return &MockIConfigurationRepository_GetConfigurationById_Call{Call: _e.mock.On("GetConfigurationById", id)}
 }
 
-func (_c *MockIConfigurationRepository_GetConfigurationById_Call) Run(run func(id string)) *MockIConfigurationRepository_GetConfigurationById_Call {
+func (_c *MockIConfigurationRepository_GetConfigurationById_Call) Run(run func(id uuid.UUID)) *MockIConfigurationRepository_GetConfigurationById_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 string
+		var arg0 uuid.UUID
 		if args[0] != nil {
-			arg0 = args[0].(string)
+			arg0 = args[0].(uuid.UUID)
 		}
 		run(
 			arg0,
@@ -385,13 +385,13 @@ func (_c *MockIConfigurationRepository_GetConfigurationById_Call) Return(configu
 	return _c
 }
 
-func (_c *MockIConfigurationRepository_GetConfigurationById_Call) RunAndReturn(run func(id string) (models.Configuration, error)) *MockIConfigurationRepository_GetConfigurationById_Call {
+func (_c *MockIConfigurationRepository_GetConfigurationById_Call) RunAndReturn(run func(id uuid.UUID) (models.Configuration, error)) *MockIConfigurationRepository_GetConfigurationById_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // GetConfigurationTypeById provides a mock function for the type MockIConfigurationRepository
-func (_mock *MockIConfigurationRepository) GetConfigurationTypeById(id string) (models.ConfigurationType, error) {
+func (_mock *MockIConfigurationRepository) GetConfigurationTypeById(id uuid.UUID) (models.ConfigurationType, error) {
 	ret := _mock.Called(id)
 
 	if len(ret) == 0 {
@@ -400,15 +400,15 @@ func (_mock *MockIConfigurationRepository) GetConfigurationTypeById(id string) (
 
 	var r0 models.ConfigurationType
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(string) (models.ConfigurationType, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) (models.ConfigurationType, error)); ok {
 		return returnFunc(id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(string) models.ConfigurationType); ok {
+	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) models.ConfigurationType); ok {
 		r0 = returnFunc(id)
 	} else {
 		r0 = ret.Get(0).(models.ConfigurationType)
 	}
-	if returnFunc, ok := ret.Get(1).(func(string) error); ok {
+	if returnFunc, ok := ret.Get(1).(func(uuid.UUID) error); ok {
 		r1 = returnFunc(id)
 	} else {
 		r1 = ret.Error(1)
@@ -422,16 +422,16 @@ type MockIConfigurationRepository_GetConfigurationTypeById_Call struct {
 }
 
 // GetConfigurationTypeById is a helper method to define mock.On call
-//   - id string
+//   - id uuid.UUID
 func (_e *MockIConfigurationRepository_Expecter) GetConfigurationTypeById(id interface{}) *MockIConfigurationRepository_GetConfigurationTypeById_Call {
 	return &MockIConfigurationRepository_GetConfigurationTypeById_Call{Call: _e.mock.On("GetConfigurationTypeById", id)}
 }
 
-func (_c *MockIConfigurationRepository_GetConfigurationTypeById_Call) Run(run func(id string)) *MockIConfigurationRepository_GetConfigurationTypeById_Call {
+func (_c *MockIConfigurationRepository_GetConfigurationTypeById_Call) Run(run func(id uuid.UUID)) *MockIConfigurationRepository_GetConfigurationTypeById_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 string
+		var arg0 uuid.UUID
 		if args[0] != nil {
-			arg0 = args[0].(string)
+			arg0 = args[0].(uuid.UUID)
 		}
 		run(
 			arg0,
@@ -445,7 +445,7 @@ func (_c *MockIConfigurationRepository_GetConfigurationTypeById_Call) Return(con
 	return _c
 }
 
-func (_c *MockIConfigurationRepository_GetConfigurationTypeById_Call) RunAndReturn(run func(id string) (models.ConfigurationType, error)) *MockIConfigurationRepository_GetConfigurationTypeById_Call {
+func (_c *MockIConfigurationRepository_GetConfigurationTypeById_Call) RunAndReturn(run func(id uuid.UUID) (models.ConfigurationType, error)) *MockIConfigurationRepository_GetConfigurationTypeById_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -618,6 +618,66 @@ func (_c *MockIConfigurationRepository_ListConfigurations_Call) Return(configura
 }
 
 func (_c *MockIConfigurationRepository_ListConfigurations_Call) RunAndReturn(run func() ([]models.Configuration, error)) *MockIConfigurationRepository_ListConfigurations_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateConfiguration provides a mock function for the type MockIConfigurationRepository
+func (_mock *MockIConfigurationRepository) UpdateConfiguration(configuration models.Configuration) (models.Configuration, error) {
+	ret := _mock.Called(configuration)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateConfiguration")
+	}
+
+	var r0 models.Configuration
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(models.Configuration) (models.Configuration, error)); ok {
+		return returnFunc(configuration)
+	}
+	if returnFunc, ok := ret.Get(0).(func(models.Configuration) models.Configuration); ok {
+		r0 = returnFunc(configuration)
+	} else {
+		r0 = ret.Get(0).(models.Configuration)
+	}
+	if returnFunc, ok := ret.Get(1).(func(models.Configuration) error); ok {
+		r1 = returnFunc(configuration)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockIConfigurationRepository_UpdateConfiguration_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateConfiguration'
+type MockIConfigurationRepository_UpdateConfiguration_Call struct {
+	*mock.Call
+}
+
+// UpdateConfiguration is a helper method to define mock.On call
+//   - configuration models.Configuration
+func (_e *MockIConfigurationRepository_Expecter) UpdateConfiguration(configuration interface{}) *MockIConfigurationRepository_UpdateConfiguration_Call {
+	return &MockIConfigurationRepository_UpdateConfiguration_Call{Call: _e.mock.On("UpdateConfiguration", configuration)}
+}
+
+func (_c *MockIConfigurationRepository_UpdateConfiguration_Call) Run(run func(configuration models.Configuration)) *MockIConfigurationRepository_UpdateConfiguration_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 models.Configuration
+		if args[0] != nil {
+			arg0 = args[0].(models.Configuration)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MockIConfigurationRepository_UpdateConfiguration_Call) Return(configuration1 models.Configuration, err error) *MockIConfigurationRepository_UpdateConfiguration_Call {
+	_c.Call.Return(configuration1, err)
+	return _c
+}
+
+func (_c *MockIConfigurationRepository_UpdateConfiguration_Call) RunAndReturn(run func(configuration models.Configuration) (models.Configuration, error)) *MockIConfigurationRepository_UpdateConfiguration_Call {
 	_c.Call.Return(run)
 	return _c
 }

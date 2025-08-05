@@ -21,9 +21,11 @@ func NewConfigurationRepository(db *gorm.DB) *ConfigurationRepository {
 	}
 }
 
-func (r *ConfigurationRepository) GetConfigurationById(name string) (models.Configuration, error) {
+// Configurations
+
+func (r *ConfigurationRepository) GetConfigurationById(id uuid.UUID) (models.Configuration, error) {
 	var configuration models.Configuration
-	err := r.db.First(&configuration, "name = ?", name).Error
+	err := r.db.First(&configuration, "id = ?", id).Error
 	if err != nil {
 		return models.Configuration{}, err
 	}
@@ -47,13 +49,23 @@ func (r *ConfigurationRepository) CreateConfiguration(configuration models.Confi
 	return configuration, nil
 }
 
-func (r *ConfigurationRepository) DeleteConfiguration(name string) error {
-	err := r.db.Delete(&models.Configuration{}, "name = ?", name).Error
+func (r *ConfigurationRepository) UpdateConfiguration(configuration models.Configuration) (models.Configuration, error) {
+	err := r.db.Save(&configuration).Error
+	if err != nil {
+		return models.Configuration{}, err
+	}
+	return configuration, nil
+}
+
+func (r *ConfigurationRepository) DeleteConfiguration(id uuid.UUID) error {
+	err := r.db.Delete(&models.Configuration{}, "id = ?", id).Error
 	if err != nil {
 		return err
 	}
 	return nil
 }
+
+// Configuration Types
 
 func (r *ConfigurationRepository) RegisterConfigurationTypeService(key uuid.UUID, plugin interfaces.IConfigurationTypeService) error {
 	// check if key already exists
@@ -67,18 +79,17 @@ func (r *ConfigurationRepository) RegisterConfigurationTypeService(key uuid.UUID
 func (r *ConfigurationRepository) GetConfigurationTypeServiceById(id uuid.UUID) (interfaces.IConfigurationTypeService, error) {
 	configurationTypeService := r.configurationTypeServices[id]
 	if configurationTypeService == nil {
-		return nil, fmt.Errorf("configuration type service not found")
+		return nil, fmt.Errorf("configuration type service with id %s not found", id.String())
 	}
 	return configurationTypeService, nil
 }
 
-func (r *ConfigurationRepository) GetConfigurationTypeById(name string) (models.ConfigurationType, error) {
-	var configurationType models.ConfigurationType
-	err := r.db.First(&configurationType, "name = ?", name).Error
-	if err != nil {
-		return models.ConfigurationType{}, err
+func (r *ConfigurationRepository) GetConfigurationTypeById(id uuid.UUID) (models.ConfigurationType, error) {
+	configurationTypeService := r.configurationTypeServices[id]
+	if configurationTypeService == nil {
+		return models.ConfigurationType{}, fmt.Errorf("configuration type service not found")
 	}
-	return configurationType, nil
+	return configurationTypeService.Get(), nil
 }
 
 func (r *ConfigurationRepository) ListConfigurationTypes() ([]models.ConfigurationType, error) {

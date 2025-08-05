@@ -36,6 +36,10 @@ func NewKubernetesConfigurationTypeService() *KubernetesConfigurationTypeService
 	return &KubernetesConfigurationTypeService{model: model}
 }
 
+func (s *KubernetesConfigurationTypeService) Get() models.ConfigurationType {
+	return s.model
+}
+
 func (s *KubernetesConfigurationTypeService) GetId() uuid.UUID {
 	return s.model.ID
 }

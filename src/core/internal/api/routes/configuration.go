@@ -10,14 +10,14 @@ func RegisterConfigurationRoutes(router *gin.RouterGroup, configurationHandler *
 	configurationGroup := router.Group("/configurations")
 	{
 		configurationGroup.GET("", configurationHandler.ListConfigurations)
+		configurationGroup.POST("", configurationHandler.CreateConfiguration)
 		configurationGroup.GET("/:id", configurationHandler.GetConfigurationById)
-		configurationGroup.POST("/create", configurationHandler.CreateConfiguration)
-		configurationGroup.DELETE("/:id", configurationHandler.DeleteConfigurationType)
+		configurationGroup.PUT("/:id", configurationHandler.UpdateConfiguration)
+		configurationGroup.DELETE("/:id", configurationHandler.DeleteConfiguration)
 	}
 	configurationTypeGroup := router.Group("/configuration-types")
 	{
 		configurationTypeGroup.GET("", configurationHandler.ListConfigurationTypes)
 		configurationTypeGroup.GET("/:id", configurationHandler.GetConfigurationById)
-		// 		configurationTypes.GET("", controller.ListConfigurationTypes)
 	}
 }

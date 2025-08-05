@@ -2,8 +2,9 @@ package handlers
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+	"github.com/mujak27/gamen/src/core/internal/api/dto"
 	interfaces "github.com/mujak27/gamen/src/core/internal/interfaces/services"
-	"github.com/mujak27/gamen/src/core/internal/models"
 )
 
 type ConfigurationHandler struct {
@@ -15,10 +16,16 @@ func NewConfigurationHandler(service interfaces.IConfigurationService) *Configur
 }
 
 // TODO: how to standardize response key?
+// TODO: standardize uuid checking
 
 func (configurationHandler *ConfigurationHandler) GetConfigurationById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	configuration, err := configurationHandler.service.GetConfigurationById(id)
+	uuid, err := uuid.Parse(id)
+	if err != nil {
+		ctx.JSON(400, gin.H{"error": "Invalid configuration ID"})
+		return
+	}
+	configuration, err := configurationHandler.service.GetConfigurationById(uuid)
 	if err != nil {
 		ctx.JSON(500, gin.H{"error": "Failed to retrieve configuration"})
 		return
@@ -28,7 +35,12 @@ func (configurationHandler *ConfigurationHandler) GetConfigurationById(ctx *gin.
 
 func (configurationHandler *ConfigurationHandler) GetConfigurationTypeById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	configurationType, err := configurationHandler.service.GetConfigurationTypeById(id)
+	uuid, err := uuid.Parse(id)
+	if err != nil {
+		ctx.JSON(400, gin.H{"error": "Invalid configuration type ID"})
+		return
+	}
+	configurationType, err := configurationHandler.service.GetConfigurationTypeById(uuid)
 	if err != nil {
 		ctx.JSON(500, gin.H{"error": "Failed to retrieve configuration type"})
 		return
@@ -56,25 +68,44 @@ func (configurationHandler *ConfigurationHandler) ListConfigurationTypes(ctx *gi
 }
 
 func (configurationHandler *ConfigurationHandler) CreateConfiguration(ctx *gin.Context) {
-	var configuration models.Configuration
-	if err := ctx.ShouldBindJSON(&configuration); err != nil {
+	var payload dto.ConfigurationCreatePayload
+	if err := ctx.ShouldBindJSON(&payload); err != nil {
 		ctx.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-	_, err := configurationHandler.service.CreateConfiguration(configuration)
+	configuration, err := configurationHandler.service.CreateConfiguration(payload)
 	if err != nil {
-		ctx.JSON(500, gin.H{"error": "Failed to retrieve configuration"})
+		ctx.JSON(500, gin.H{"error": "Failed to create configuration"})
 		return
 	}
 	ctx.JSON(200, gin.H{"configuration": configuration})
 }
 
-func (configurationHandler *ConfigurationHandler) DeleteConfigurationType(ctx *gin.Context) {
-	name := ctx.Param("id")
-	err := configurationHandler.service.DeleteConfiguration(name)
-	if err != nil {
-		ctx.JSON(500, gin.H{"error": "Failed to delete configuration type"})
+func (configurationHandler *ConfigurationHandler) UpdateConfiguration(ctx *gin.Context) {
+	var payload dto.ConfigurationUpdatePayload
+	if err := ctx.ShouldBindJSON(&payload); err != nil {
+		ctx.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(200, gin.H{"message": "Configuration type deleted successfully"})
+	configuration, err := configurationHandler.service.UpdateConfiguration(payload)
+	if err != nil {
+		ctx.JSON(500, gin.H{"error": "Failed to update configuration"})
+		return
+	}
+	ctx.JSON(200, gin.H{"configuration": configuration})
+}
+
+func (configurationHandler *ConfigurationHandler) DeleteConfiguration(ctx *gin.Context) {
+	id := ctx.Param("id")
+	uuid, err := uuid.Parse(id)
+	if err != nil {
+		ctx.JSON(400, gin.H{"error": "Invalid configuration ID"})
+		return
+	}
+	err = configurationHandler.service.DeleteConfiguration(uuid)
+	if err != nil {
+		ctx.JSON(500, gin.H{"error": "Failed to delete configuration"})
+		return
+	}
+	ctx.JSON(200, gin.H{"message": "Configuration deleted successfully"})
 }

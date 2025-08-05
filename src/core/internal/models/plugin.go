@@ -37,7 +37,7 @@ func (c PluginType) Value() (driver.Value, error) {
 }
 
 type PluginTag struct {
-	ID          uuid.UUID `json:"id" db:"id" gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
+	ID          uuid.UUID `json:"id" db:"id" gorm:"type:uuid;primary_key;not null"`
 	Name        string    `json:"name" db:"name" gorm:"uniqueIndex;not null"`
 	Description string    `json:"description" db:"description"`
 	CreatedAt   time.Time `json:"created_at" db:"created_at" gorm:"autoCreateTime"`
@@ -48,30 +48,24 @@ type PluginTag struct {
 }
 
 type Plugin struct {
-	ID                  uuid.UUID  `json:"id" db:"id" gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
-	Name                string     `json:"name" db:"name" gorm:"uniqueIndex;not null"`
-	Description         string     `json:"description" db:"description"`
-	Type                PluginType `json:"type" db:"type" gorm:"type:varchar(20);not null"`
-	UISchema            JSON       `json:"ui_schema" db:"ui_schema" gorm:"type:jsonb"`
-	Version             string     `json:"version" db:"version"`
-	IsActive            bool       `json:"is_active" db:"is_active" gorm:"default:true"`
-	ConfigurationTypeID uuid.UUID  `json:"configuration_type_id" db:"configuration_type_id" gorm:"type:uuid;not null"`
-	CreatedAt           time.Time  `json:"created_at" db:"created_at" gorm:"autoCreateTime"`
-	UpdatedAt           time.Time  `json:"updated_at" db:"updated_at" gorm:"autoUpdateTime"`
-
-	// Relationships
-	ConfigurationType ConfigurationType  `json:"configuration_type,omitempty" gorm:"foreignKey:ConfigurationTypeID"`
-	PluginTagMappings []PluginTagMapping `json:"tag_mappings,omitempty" gorm:"foreignKey:PluginID"`
-	Widgets           []Widget           `json:"widgets,omitempty" gorm:"foreignKey:PluginID"`
+	ID                  uuid.UUID  `json:"id"`
+	Name                string     `json:"name"`
+	Description         string     `json:"description"`
+	Type                PluginType `json:"type"`
+	UISchema            JSON       `json:"ui_schema"`
+	Version             string     `json:"version"`
+	IsActive            bool       `json:"is_active"`
+	ConfigurationTypeID uuid.UUID  `json:"configuration_type_id"`
+	CreatedAt           time.Time  `json:"created_at"`
+	UpdatedAt           time.Time  `json:"updated_at"`
 }
 
 type PluginTagMapping struct {
-	ID        uuid.UUID `json:"id" db:"id" gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
+	ID        uuid.UUID `json:"id" db:"id" gorm:"type:uuid;primary_key;not null"`
 	PluginID  uuid.UUID `json:"plugin_id" db:"plugin_id" gorm:"type:uuid;not null"`
 	TagID     uuid.UUID `json:"tag_id" db:"tag_id" gorm:"type:uuid;not null"`
 	CreatedAt time.Time `json:"created_at" db:"created_at" gorm:"autoCreateTime"`
 
 	// Relationships
-	Plugin Plugin    `json:"plugin,omitempty" gorm:"foreignKey:PluginID"`
-	Tag    PluginTag `json:"tag,omitempty" gorm:"foreignKey:TagID"`
+	Tag PluginTag `json:"tag,omitempty" gorm:"foreignKey:TagID"`
 }

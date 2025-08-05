@@ -43,14 +43,8 @@ func TestWidgetServiceActionSuccess(t *testing.T) {
 	}
 
 	mockWidgetRepository.On("GetWidgetById", payload.WidgetID).Return(models.Widget{
-		ID:       widgetUUID,
-		PluginID: pluginUUID,
-		Plugin: models.Plugin{
-			ID:          pluginUUID,
-			Name:        "test",
-			Description: "test",
-			Version:     "1.0.0",
-		},
+		ID:              widgetUUID,
+		PluginID:        pluginUUID,
 		ConfigurationID: configurationUUID,
 		Configuration:   configuration,
 		CreatedAt:       time.Now(),
