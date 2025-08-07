@@ -25,6 +25,10 @@ func Wire(r *gin.Engine, db *gorm.DB) {
 	dashboardHandler := handlers.NewDashboardHandler(dashboardService)
 	catalogueHandler := handlers.NewCatalogueHandler(catalogueService)
 
+	userRepo := databases.NewUserRepository(db)
+	userService := services.NewUserService(userRepo)
+	userHandler := handlers.NewUserHandler(userService)
+
 	// configuration types
 
 	// kubernetes configuration type
@@ -39,5 +43,5 @@ func Wire(r *gin.Engine, db *gorm.DB) {
 	// register catalogue to static repository
 	catalogueRepo.RegisterPluginFunction(restartDeploymentService.GetId(), restartDeploymentService)
 
-	routes.RegisterRoutes(r, configurationHandler, dashboardHandler, catalogueHandler)
+	routes.RegisterRoutes(r, configurationHandler, dashboardHandler, catalogueHandler, userHandler)
 }

@@ -11,11 +11,13 @@ func RegisterRoutes(
 	configurationHandler *handlers.ConfigurationHandler,
 	dashboardHandler *handlers.DashboardHandler,
 	catalogueHandler *handlers.CatalogueHandler,
+	userHandler interfaces.UserHandler,
 ) {
 	apiV1 := router.Group("/api/v1")
 	RegisterConfigurationRoutes(apiV1, configurationHandler)
 	RegisterDashboardRoutes(apiV1, dashboardHandler)
 	RegisterCatalogueRoutes(apiV1, catalogueHandler)
+	RegisterUserRoutes(apiV1, userHandler)
 }
 
 func RegisterPluginListRoute(
