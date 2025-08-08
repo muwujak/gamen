@@ -1,14 +1,17 @@
 package services
 
 import (
+	"context"
 	"fmt"
 	"testing"
 
 	"github.com/google/uuid"
 	"github.com/mujak27/gamen/src/core/internal/api/dto"
+	"github.com/mujak27/gamen/src/core/internal/api/middleware"
 	kubernetesConfigurationType "github.com/mujak27/gamen/src/core/internal/extensions/configuration_types/kubernetes/services"
 	"github.com/mujak27/gamen/src/core/internal/interfaces/repository/mocks"
 	serviceInterface "github.com/mujak27/gamen/src/core/internal/interfaces/services"
+	serviceMocks "github.com/mujak27/gamen/src/core/internal/interfaces/services/mocks"
 	"github.com/mujak27/gamen/src/core/internal/models"
 	"github.com/mujak27/gamen/src/core/internal/repository/databases"
 	"github.com/mujak27/gamen/src/core/internal/seeding"
@@ -49,20 +52,31 @@ func TestConfigurationServiceCreateConfiguration(t *testing.T) {
 	kubernetesConfigurationTypeService := kubernetesConfigurationType.NewKubernetesConfigurationTypeService()
 
 	// mock configuration repository to return kubernetes configuration type service
-	configurationRepo := mocks.NewMockIConfigurationRepository(t)
-	configurationRepo.EXPECT().GetConfigurationTypeServiceById(mock.Anything).Return(kubernetesConfigurationTypeService, nil).Once()
-	configurationRepo.EXPECT().CreateConfiguration(mock.Anything).Return(models.Configuration{}, nil)
+	mockConfigurationRepo := mocks.NewMockIConfigurationRepository(t)
+	mockUserService := serviceMocks.NewMockIUserService(t)
 
-	configurationService := NewConfigurationService(configurationRepo)
+	configurationService := NewConfigurationService(mockConfigurationRepo, mockUserService)
 
-	_, err := configurationService.CreateConfiguration(validPayload)
+	// CASE: create configuration without user id in context
+	blankContext := context.Background()
+	_, err := configurationService.CreateConfiguration(blankContext, validPayload)
+	assert.Error(t, err)
+
+	// CASE: create valid configuration with user id in context
+	mockConfigurationRepo.EXPECT().GetConfigurationTypeServiceById(mock.Anything).Return(kubernetesConfigurationTypeService, nil).Once()
+	mockConfigurationRepo.EXPECT().CreateConfiguration(mock.Anything).Return(models.Configuration{}, nil)
+	mockUserService.EXPECT().IsTeamMember(mock.Anything, mock.Anything).Return(true, nil).Once()
+	validContext := context.WithValue(blankContext, middleware.UserIDKey, uuid.New().String())
+	_, err = configurationService.CreateConfiguration(validContext, validPayload)
 	assert.NoError(t, err)
 
-	_, err = configurationService.CreateConfiguration(invalidPayload)
+	// CASE: create invalid configuration with user id in context
+	_, err = configurationService.CreateConfiguration(validContext, invalidPayload)
 	assert.Error(t, err)
 }
 
-func TestConfigurationServiceCreateAndDeleteConfiguration(t *testing.T) {
+// TODO: split test into multiple based on test cases
+func TestConfigurationServiceConfigurationLifecycle(t *testing.T) {
 
 	db, err := gorm.Open(sqlite.Open("mock.db"), &gorm.Config{})
 	if err != nil {
@@ -74,10 +88,12 @@ func TestConfigurationServiceCreateAndDeleteConfiguration(t *testing.T) {
 	kubernetesConfigurationTypeService := kubernetesConfigurationType.NewKubernetesConfigurationTypeService()
 
 	// TODO: use valid teamID
+	teamId := uuid.New()
+	userId := uuid.New()
 	validPayload := dto.ConfigurationCreatePayload{
 		Name:                "homelab-kubernetes",
 		Description:         "testing purpose",
-		TeamID:              uuid.New(),
+		TeamID:              teamId,
 		ConfigurationTypeID: kubernetesConfigurationTypeService.GetId(),
 		Data: map[string]interface{}{
 			"api-server-endpoint": "https://kubernetes.default.svc",
@@ -90,11 +106,20 @@ func TestConfigurationServiceCreateAndDeleteConfiguration(t *testing.T) {
 	fmt.Println("kubernetesConfigurationTypeService.GetId(): ", kubernetesConfigurationTypeService.GetId())
 	configurationRepo.RegisterConfigurationTypeService(kubernetesConfigurationTypeService.GetId(), kubernetesConfigurationTypeService)
 
-	configurationService := NewConfigurationService(configurationRepo)
+	userService := serviceMocks.NewMockIUserService(t)
 
-	createdConfiguration, err := configurationService.CreateConfiguration(validPayload)
-	fmt.Println("error: ", err)
-	fmt.Println(createdConfiguration)
+	configurationService := NewConfigurationService(configurationRepo, userService)
+
+	// CASE: create configuration without user id in context
+	blankContext := context.Background()
+	_, err = configurationService.CreateConfiguration(blankContext, validPayload)
+	assert.Error(t, err)
+
+	// CASE: create valid configuration with user id in context
+	userService.EXPECT().IsTeamMember(userId, teamId).Return(true, nil).Once()
+	validContext := context.WithValue(blankContext, middleware.UserIDKey, userId.String())
+
+	createdConfiguration, err := configurationService.CreateConfiguration(validContext, validPayload)
 	assert.NoError(t, err)
 	assert.NotNil(t, createdConfiguration)
 
@@ -108,15 +133,19 @@ func TestConfigurationServiceCreateAndDeleteConfiguration(t *testing.T) {
 		},
 	}
 
-	updatedConfiguration, err := configurationService.UpdateConfiguration(updatedPayload)
-	fmt.Println("error: ", err)
-	fmt.Println(updatedConfiguration)
+	// CASE: update configuration with matching user id in context
+	userService.EXPECT().IsTeamMember(userId, teamId).Return(true, nil).Once()
+	updatedConfiguration, err := configurationService.UpdateConfiguration(validContext, updatedPayload)
 	assert.NoError(t, err)
 	assert.NotNil(t, updatedConfiguration)
 	assert.Equal(t, updatedConfiguration.Name, "homelab-kubernetes-updated")
 	assert.Equal(t, updatedConfiguration.Description, "testing purpose updated")
 
-	// TODO: use delete service instead of direct db delete
-	err = configurationService.DeleteConfiguration(createdConfiguration.ID)
+	// CASE: delete configuration with matching user id in context
+	userService.EXPECT().IsTeamMember(userId, teamId).Return(true, nil).Once()
+	deletePayload := dto.ConfigurationDeletePayload{
+		ID: createdConfiguration.ID,
+	}
+	err = configurationService.DeleteConfiguration(validContext, deletePayload)
 	assert.NoError(t, err)
 }

@@ -19,3 +19,15 @@ type ConfigurationUpdatePayload struct {
 	Description string      `json:"description" validate:"required"`
 	Data        models.JSON `json:"data" validate:"required"`
 }
+
+type ConfigurationListPayload struct {
+	TeamID uuid.UUID `json:"team_id" validate:"required"`
+}
+
+type ConfigurationGetPayload struct {
+	ID uuid.UUID `json:"id" validate:"required"`
+}
+
+type ConfigurationDeletePayload struct {
+	ID uuid.UUID `json:"id" validate:"required"`
+}

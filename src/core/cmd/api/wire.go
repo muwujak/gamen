@@ -17,13 +17,21 @@ func Wire(r *gin.Engine, db *gorm.DB) {
 	dashboardRepo := databases.NewDashboardRepository(db)
 	catalogueRepo := databases.NewCatalogueRepository(db)
 
-	configurationService := services.NewConfigurationService(configurationRepo)
+	userRepo := databases.NewUserRepository(db)
+	userService := services.NewUserService(userRepo)
+	userHandler := handlers.NewUserHandler(userService)
+
+	configurationService := services.NewConfigurationService(configurationRepo, userService)
 	dashboardService := services.NewDashboardService(dashboardRepo)
 	catalogueService := services.NewCatalogueService(catalogueRepo, configurationService)
 
 	configurationHandler := handlers.NewConfigurationHandler(configurationService)
 	dashboardHandler := handlers.NewDashboardHandler(dashboardService)
 	catalogueHandler := handlers.NewCatalogueHandler(catalogueService)
+
+	widgetRepo := databases.NewWidgetRepository(db)
+	widgetService := services.NewWidgetService(catalogueService, configurationService, widgetRepo)
+	widgetHandler := handlers.NewWidgetHandler(widgetService)
 
 	// configuration types
 
@@ -39,5 +47,5 @@ func Wire(r *gin.Engine, db *gorm.DB) {
 	// register catalogue to static repository
 	catalogueRepo.RegisterPluginFunction(restartDeploymentService.GetId(), restartDeploymentService)
 
-	routes.RegisterRoutes(r, configurationHandler, dashboardHandler, catalogueHandler)
+	routes.RegisterRoutes(r, configurationHandler, dashboardHandler, catalogueHandler, userHandler, widgetHandler)
 }

@@ -1,6 +1,7 @@
 package databases
 
 import (
+	"github.com/google/uuid"
 	"github.com/mujak27/gamen/src/core/internal/models"
 	"gorm.io/gorm"
 )
@@ -13,7 +14,7 @@ func NewWidgetRepository(db *gorm.DB) *WidgetRepository {
 	return &WidgetRepository{db: db}
 }
 
-func (r *WidgetRepository) GetWidgetById(id string) (models.Widget, error) {
+func (r *WidgetRepository) GetWidgetById(id uuid.UUID) (models.Widget, error) {
 	var widget models.Widget
 	err := r.db.First(&widget, "id = ?", id).Error
 	if err != nil {
