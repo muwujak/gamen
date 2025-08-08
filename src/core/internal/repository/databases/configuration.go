@@ -32,9 +32,9 @@ func (r *ConfigurationRepository) GetConfigurationById(id uuid.UUID) (models.Con
 	return configuration, nil
 }
 
-func (r *ConfigurationRepository) ListConfigurations() ([]models.Configuration, error) {
+func (r *ConfigurationRepository) ListConfigurationsByTeamId(teamId uuid.UUID) ([]models.Configuration, error) {
 	var configurations []models.Configuration
-	err := r.db.Find(&configurations).Error
+	err := r.db.Where("team_id = ?", teamId).Find(&configurations).Error
 	if err != nil {
 		return []models.Configuration{}, err
 	}

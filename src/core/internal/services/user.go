@@ -64,8 +64,8 @@ func (u *UserService) Register(request dto.RegisterRequest) (*models.User, error
 		Username:     request.Username,
 		PasswordHash: string(hashedPassword),
 		FirstName:    request.FirstName,
-		LastName:     request.LastName,
 		IsActive:     true,
+		LastName:     request.LastName,
 		CreatedAt:    time.Now(),
 		UpdatedAt:    time.Now(),
 	}
@@ -75,4 +75,15 @@ func (u *UserService) Register(request dto.RegisterRequest) (*models.User, error
 	}
 
 	return user, nil
+}
+
+func (u *UserService) IsTeamMember(userId uuid.UUID, teamId uuid.UUID) (bool, error) {
+	teamMember, err := u.userRepository.FindTeamMemberByUserIdAndTeamId(userId, teamId)
+	if err != nil {
+		return false, err
+	}
+	if teamMember.ID == uuid.Nil {
+		return false, nil
+	}
+	return true, nil
 }
